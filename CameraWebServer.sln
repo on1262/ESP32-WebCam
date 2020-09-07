@@ -5,7 +5,17 @@ VisualStudioVersion = 15.0.28307.1209
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CameraWebServer", "CameraWebServer.vcxproj", "{61397659-4953-4F32-9421-30D7E5252ADE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ESP32-1.0", "..\..\..\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESP32\ESP32-1.0.vcxitems", "{E40EB690-95F4-422E-8386-0F3FDCB1DD3C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BluetoothSerial-1.0", "..\..\..\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\BluetoothSerial\BluetoothSerial-1.0.vcxitems", "{A82C1353-E45E-4BED-8425-03D2237CF86B}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\..\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\BluetoothSerial\BluetoothSerial-1.0.vcxitems*{61397659-4953-4f32-9421-30d7e5252ade}*SharedItemsImports = 4
+		..\..\..\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESP32\ESP32-1.0.vcxitems*{61397659-4953-4f32-9421-30d7e5252ade}*SharedItemsImports = 4
+		..\..\..\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\BluetoothSerial\BluetoothSerial-1.0.vcxitems*{a82c1353-e45e-4bed-8425-03d2237cf86b}*SharedItemsImports = 9
+		..\..\..\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESP32\ESP32-1.0.vcxitems*{e40eb690-95f4-422e-8386-0f3fdcb1dd3c}*SharedItemsImports = 9
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86

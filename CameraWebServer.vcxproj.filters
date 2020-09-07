@@ -35,5 +35,8 @@
     <ClCompile Include="app_httpd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\HardwareSerial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,10 +1,11 @@
-#include <dummy.h>
+#include "BluetoothSerial.h"
 #include "esp_camera.h"
 #include <WiFi.h>
-
+//#include "communicate.h"
 //
 // WARNING!!! Make sure that you have either selected ESP32 Wrover Module,
 //            or another board which has PSRAM enabled
+//
 
 // Select camera model
 //#define CAMERA_MODEL_WROVER_KIT
@@ -100,13 +101,62 @@ void camSetup() {
   Serial.println("' to connect");
 }
 
+
+bool testJudge = false;
+BluetoothSerial SerialBT;
 void setup() {
+	Serial.begin(115200);
+	Serial.println("cam setup");
+	SerialBT.begin("ESP32test2"); //Bluetooth device name
+	Serial.println("The device started, now you can pair it with bluetooth!");
+	Serial.println("ESP2 setup");
+	///*a.BTSetup();*/
 	camSetup(); //³õÊ¼»¯ÉãÏñÍ·
+	
+	/*a.serialSetup();*/
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Serial.println("test");
-  delay(10000);
+	if (testJudge==false)
+	{
+		Serial.println("test1");
+	}
+	delay(1000);
+	/*a.PcToUno();
+	a.UnoToPc();*/
+	char PcToUnomessage[5]; 
+	if (SerialBT.available() > 0) {
+		for (int i = 0; i < 5; i++)
+		{
+			if (SerialBT.available() > 0) {
+				PcToUnomessage[i] = (char)SerialBT.read();
+			}
+			else
+			{
+				i--;
+			}
+		}
+		Serial.println(PcToUnomessage /*(char)SerialBT.read()*/);
+	}
+	
+	
+	
+	char UnoToPcmessage[5]; 
+	if (Serial.available() > 0) {
+		for (int j = 0; j < 5; j++)
+		{
+			if (SerialBT.available() > 0) {
+				UnoToPcmessage[j] = (char)Serial.read();
+			}
+			else
+			{
+				j--;
+			}
+			
+		}
+		SerialBT.println(UnoToPcmessage/*(char)Serial.read()*/);
+	}
+	testJudge = true;
 }

@@ -26,7 +26,13 @@ char SerialDetect;
 BluetoothSerial SerialBT;
 void startCameraServer();
 
-void camSetup() {
+//virtual car mode
+bool isRunning = false;
+int direction = 0;
+int distance = 0;
+int targetDistance = 0;
+char nowRunningCmd;
+void camSetup() { //初始化摄像头
 	camera_config_t config;
 	config.ledc_channel = LEDC_CHANNEL_0;
 	config.ledc_timer = LEDC_TIMER_0;
@@ -103,7 +109,7 @@ void camSetup() {
 	Serial.println("' to connect");
 }
 
-void setup() {
+void serialSetup() { //初始化蓝牙串口和uno通信串口
 	Serial.begin(115200);
 	Serial.setDebugOutput(true);
 	Serial.println(); //这里必须先输出一个换行符才能正常启动Serial
@@ -113,10 +119,9 @@ void setup() {
 	Serial2.begin(9600);
 	Serial2.println();
 	Serial.println("Serial2 begin");
-	camSetup(); //初始化摄像头
 }
 
-void loop() {
+void relayLoop() { //中继循环调用
 	//检测蓝牙串口，把接收到的指令发给uno
 	if (SerialBT.available() > 0) {
 		BTDetect = (char)SerialBT.read();
@@ -151,4 +156,96 @@ void loop() {
 			}
 		}
 	}
+}
+
+void virtualCarSetup() //虚拟小车，用于测试GUI
+{
+	Serial.begin(115200);
+	Serial.setDebugOutput(true);
+	Serial.println();
+	Serial.println("ESP32 virtual car mode.");
+}
+
+void reset() {
+	distance = 0;
+	targetDistance = 0;
+}
+void virtualCarLoop() {
+	if (Serial.available() > 0) {
+		BTDetect = (char)Serial.read();
+		for (int k = 1; k < 5; k++) {
+			PC2UnoMessage[k] = (char)Serial.read();
+		}
+		int num = (PC2UnoMessage[2] - '0') * 100 + (PC2UnoMessage[3] - '0') * 10 + (PC2UnoMessage[4] - '0');
+		switch (BTDetect) {
+		case 'F':
+			nowRunningCmd = BTDetect;
+			isRunning = true;
+			direction = 1;
+			targetDistance = num;
+			break;
+		case 'B':
+			nowRunningCmd = BTDetect;
+			isRunning = true;
+			direction = -1;
+			targetDistance = num;
+			break;
+		case 'R':
+			nowRunningCmd = BTDetect;
+			isRunning = true;
+			direction = 1;
+			targetDistance = num;
+			break;
+		case 'L':
+			nowRunningCmd = BTDetect;
+			isRunning = true;
+			direction = -1;
+			targetDistance = num;
+			break;
+		case 'S':
+			nowRunningCmd = BTDetect;
+			isRunning = false;
+			if (PC2UnoMessage[1] == '0' && num == 0) {
+				Serial.println("-E1;");
+			}
+			else {
+				Serial.println("-S;");
+			}
+			reset();
+			break;
+		default:
+			break;
+		}
+	}
+	if (isRunning == true) {
+		if (abs(targetDistance) > abs(distance))
+		{
+			Serial.print("-");
+			Serial.print(nowRunningCmd);
+			Serial.print(distance);
+			Serial.println(";");
+			distance += direction;
+			delay(50);
+		}
+		else {
+			Serial.println("-E0;");
+			isRunning = false;
+			reset();
+		}
+	}
+}
+
+void setup() {
+	/*
+	serialSetup();
+	camSetup();
+	*/
+	virtualCarSetup();
+}
+
+void loop() {
+	/*
+	relayLoop();
+	*/
+	virtualCarLoop();
 }
